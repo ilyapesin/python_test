@@ -10,13 +10,18 @@ import pytest
 @pytest.fixture()
 def init():
     wd = webdriver.Firefox()
+    wd.maximize_window()
+    wd.implicitly_wait(5)
     yield wd
+    wd.quit()
 
 
 def test_open_s6(init):
     init.get("https://www.demoblaze.com/")
-    sleep(5000)
-    galaxy= init.find_element(By.LINK_TEXT, 'Samsung galaxy s6')
+    galaxy= init.find_element(By.XPATH, '//a[text()="Samsung galaxy s6"]')
     galaxy.click()
+    title=init.find_element(By.XPATH, '//h2')
+    assert title.text == 'Samsung galaxy s6'
+
 
 
